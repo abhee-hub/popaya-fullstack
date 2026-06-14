@@ -69,7 +69,7 @@ npm i
 Start the server:
 
 ```bash
-
+node index.js
 ```
 
 ### Frontend Setup
