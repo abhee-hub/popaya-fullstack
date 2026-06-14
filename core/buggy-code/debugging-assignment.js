@@ -19,9 +19,12 @@ app.get("/users", (req, res) => {
 
 app.get("/users/:id", (req, res) => {
   const id = Number(req.params.id);
+  if (isNaN(id)) {
+    return res.status(400).send({ message: "Invalid user id" });
+  }
   const user = getUserById(id);
   if(!user){
-    res.status(404).send({message:"User fot found!"})
+    return res.status(404).send({message:"User fot found!"})
   }
   res.send(user);
 });
@@ -52,7 +55,7 @@ app.get("/notes", (req, res) => {
 });
 
 function generateNoteId() {
-  return Math.floor(Math.random() * 1000);
+  return notes.length ? Math.max(...notes.map(n => n.id)) + 1 : 1;
 }
 
 
@@ -140,6 +143,9 @@ app.get("/profile/:id", (req, res) => {
 
 app.post("/sum", (req, res) => {
   const { a, b } = req.body;
+  if (a === undefined || b === undefined || isNaN(Number(a)) || isNaN(Number(b))) {
+    return res.status(400).send({ message: "Valid a and b are required" });
+  }
   const total = Number(a) + Number(b);
   res.send({ total });
 });
